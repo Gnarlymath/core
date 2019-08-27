@@ -13,5 +13,7 @@ export const transformWallet = (wallet: State.IWallet) => {
         balance: Utils.BigNumber.make(wallet.balance).toFixed(),
         isDelegate: !!username,
         vote: wallet.getAttribute("vote"),
+        multiSignature: wallet.getAttribute("multiSignature"),
+        debug: (wallet as any).attributes
     };
 };
