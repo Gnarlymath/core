@@ -398,16 +398,21 @@ export class WalletManager implements State.IWalletManager {
     }
 
     public buildDelegateRanking(roundInfo?: Shared.IRoundInfo): State.IWallet[] {
-        const delegates: State.IWallet[] = this.allByUsername().filter(
-            (wallet: State.IWallet) => !wallet.hasAttribute("delegate.resigned"),
-        );
+        const delegates: State.IWallet[] = this.allByUsername().filter((wallet: State.IWallet) => {
+            if (wallet.hasAttribute("delegate.resigned")) {
+                wallet.forgetAttribute("delegate.rank");
+                return false;
+            }
+
+            return true;
+        });
 
         let delegateWallets = delegates
             .sort((a, b) => {
                 const voteBalanceA: Utils.BigNumber = a.getAttribute("delegate.voteBalance");
                 const voteBalanceB: Utils.BigNumber = b.getAttribute("delegate.voteBalance");
 
-                const diff = voteBalanceB.comparedTo(voteBalanceA);
+                const diff: number = voteBalanceB.comparedTo(voteBalanceA);
                 if (diff === 0) {
                     if (a.publicKey === b.publicKey) {
                         throw new Error(
