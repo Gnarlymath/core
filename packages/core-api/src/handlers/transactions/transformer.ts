@@ -28,6 +28,7 @@ export const transformTransaction = (model, transform) => {
         blockId: model.blockId,
         version: data.version,
         type: data.type,
+        typeGroup: data.typeGroup,
         amount: data.amount.toFixed(),
         fee: data.fee.toFixed(),
         sender,
